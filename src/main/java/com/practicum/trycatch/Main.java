@@ -5,38 +5,45 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
     }
 }
 
 class ExceptionHandling {
 
-    static public void getAndPrintInteger() {
+    static public int getAndPrintInteger() {
         Scanner scanner = new Scanner(System.in);
-
-        try {
-            int value = scanner.nextInt();
-            System.out.println("Вы ввели с клавиатуры " + value);
-        } catch (InputMismatchException ime) {
-            System.out.println("Не правильный ввод!");
-        } finally {
-            System.out.println("Мы в блоке finally");
-            scanner.close();
+        boolean isIntInputGiven = false;
+        int value;
+        while (true) {
+            try {
+                value = scanner.nextInt();
+                System.out.println("Вы ввели с клавиатуры " + value);
+                isIntInputGiven = true;
+                return value;
+            } catch (InputMismatchException ime) {
+                System.out.println("Неправильный ввод!");
+            } finally {
+                System.out.print("Мы в блоке finally и сейчас");
+                if (isIntInputGiven) {
+                    System.out.println(" закроем сканер");
+                    scanner.close();
+                } else  {
+                    System.out.println(" очистим сканер");
+                    scanner.next();
+                }
+            }
         }
     }
 
-    static public void sleep(int seconds) throws InterruptedException {
-        if (seconds == 0) throw new NullPointerException();
-        Thread.sleep(seconds * 1000L);
-    }
-
-    static public int whatsFinallyReturned() {
+    static public int whatsFinallyReturned(int i) {
         try {
+            if (i == 0)
+                throw new Exception();
             return 0;
         } catch (Exception e) {
             return 1;
         } finally {
-            return 2;
+//            return 2;
         }
     }
 }
